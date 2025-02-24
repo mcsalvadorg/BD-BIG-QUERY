@@ -1,0 +1,107 @@
+CREATE TABLE `subtle-fulcrum-434718-d2.test.Estudiantes` (
+    id_estudiante INT,
+    nombre STRING,
+    apellido STRING
+);
+
+CREATE TABLE `subtle-fulcrum-434718-d2.test.Cursos` (
+    id_curso INT64,
+    nombre_curso STRING
+);
+
+CREATE TABLE `subtle-fulcrum-434718-d2.test.Profesores` (
+    id_profesor INT,
+    nombre STRING,
+    apellido STRING
+);
+
+CREATE TABLE `subtle-fulcrum-434718-d2.test.Matriculas` (
+    id_matricula INT64,
+    id_estudiante INT64,
+    id_curso INT64,
+    calificacion FLOAT64  
+);
+
+
+INSERT INTO `subtle-fulcrum-434718-d2.test.Estudiantes` (id_estudiante, nombre, apellido)
+VALUES
+  (1, 'Juan', 'Pérez'),
+  (2, 'Ana', 'Gómez'),
+  (3, 'Luis', 'Martínez'),
+  (4, 'Sofía', 'López'),
+  (5, 'Carlos', 'Navarro'),
+  (6, 'María', 'Díaz'),
+  (7, 'Jorge', 'Morales'),
+  (8, 'Patricia', 'Castro'),
+  (9, 'Roberto', 'Fernández'),
+  (10, 'Lucía', 'Pérez');
+
+INSERT INTO `subtle-fulcrum-434718-d2.test.Cursos` (id_curso, nombre_curso)
+VALUES
+  (202401, 'Matematicas'),
+  (202402, 'Naturales'),
+  (202403, 'Lenguajes');
+
+  INSERT INTO `subtle-fulcrum-434718-d2.test.Profesores` (id_profesor, nombre, apellido)
+VALUES
+  (1001, 'Alonso', 'Jimenez'),
+  (1002, 'Alicia', 'Garcia'),
+  (1003, 'Gris', 'Fernandez');
+ 
+INSERT INTO `subtle-fulcrum-434718-d2.test.Matriculas` (id_matricula, id_estudiante, id_curso, calificacion)
+VALUES
+  (20241001, 1, 202401, 8.0),
+  (20241002, 1, 202402, 9.2),
+  (20241003, 1, 202403, 10.0),
+  (20241004, 2, 202401, 7.2),
+  (20241005, 2, 202402, 6.8),
+  (20241006, 2, 202403, 9.9),
+  (20241007, 3, 202401, 7.5),
+  (20241008, 3, 202402, 7.2),
+  (20241009, 3, 202403, 7.8),
+  (20241010, 4, 202401, 9.3),
+  (20241011, 4, 202402, 9.1),
+  (20241012, 4, 202403, 9.8),
+  (20241013, 5, 202401, 8.2),
+  (20241014, 5, 202402, 9.0),
+  (20241015, 5, 202403, 10.0),
+  (20241016, 6, 202401, 8.0),
+  (20241017, 6, 202402, 8.5),
+  (20241018, 6, 202403, 8.4),
+  (20241019, 7, 202401, 6.2),
+  (20241019, 7, 202402, 7.5),
+  (20241019, 7, 202403, 8.6),
+  (20241020, 8, 202401, 6.9),
+  (20241021, 8, 202402, 6.1),
+  (20241022, 8, 202403, 6.9),
+  (20241023, 9, 202401, 6.8),
+  (20241024, 9, 202402, 7.8),
+  (20241025, 9, 202403, 7.7),
+  (20241026, 10, 202401, 6.8),
+  (20241027, 10, 202402, 6.6),
+  (20241028, 10, 202403, 7.9);
+
+
+##consulta SQL que devuelva el nombre del curso, el nombre del estudiante que obtuvo la mejor calificación en dicho curso y la nota obtenida.##
+
+
+SELECT 
+    c.nombre_curso,
+    e.nombre,
+    e.apellido,
+    cal.calificacion
+FROM 
+    `subtle-fulcrum-434718-d2.test.Matriculas` cal
+JOIN 
+    `subtle-fulcrum-434718-d2.test.Cursos` c ON cal.id_curso = c.id_curso
+JOIN 
+    `subtle-fulcrum-434718-d2.test.Estudiantes` e ON cal.id_estudiante = e.id_estudiante
+WHERE 
+    (cal.calificacion) IN (
+        SELECT 
+            MAX(calificacion)
+        FROM 
+            `subtle-fulcrum-434718-d2.test.Matriculas` 
+        GROUP BY 
+            id_curso
+    );
